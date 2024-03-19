@@ -1,0 +1,60 @@
+﻿@using DataAccess.Models;
+@model List<Product>
+@{
+    string productImagePlaceholder = @"https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg";
+}
+<h4>List Products</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            @* navigation category *@
+            <ul class="nav flex-column">
+                @foreach (var category in ViewBag.ListCategories)
+                {
+                    @if (ViewBag.ActiveCategoryId == category.Id)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link disabled" aria-current="page">@category.Name</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" asp-route-category_Id="@category.Id" class="nav-link active" aria-current="page">@category.Name</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div> <!-- close col-3 -->
+        <div class="col-9">
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="product-card-img">
+                                <img src="@(product.ImagePath??productImagePlaceholder)" class="card-img-top" alt="...">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@product.Name</h5>
+                                    <p class="card-text">@product.Description</p>
+                                    <p class="fw-bold">Price <span class="badge bg-primary">@product.Price</span></p>
+                                    <a asp-controller="Product" asp-action="Details" asp-route-id=@product.Id class="btn btn-dark">Details</a>
+                                    <a asp-controller="Product" asp-action="Delete" asp-route-id=@product.Id class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <h3>Products was not found...</h3>
+                </div>
+            }
+        </div> <!-- close col-9 -->
+    </div> <!-- close row -->
+</div> <!-- close container -->
