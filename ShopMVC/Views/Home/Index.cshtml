@@ -4,6 +4,15 @@
     string productImagePlaceholder = @"https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg";
 }
 <h4>List Products</h4>
+@if (Context.Request.Cookies.ContainsKey("name"))
+{
+    <p>@Context.Request.Cookies["name"]</p>
+    <p>@ViewBag.NameAuthor</p>
+}
+else
+{
+    <p>Not Cookies</p>
+}
 <div class="container">
     <div class="row">
         <div class="col-3">
