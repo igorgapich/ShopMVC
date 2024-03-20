@@ -51,7 +51,7 @@ else
                                     <p class="card-text">@product.Description</p>
                                     <p class="fw-bold">Price <span class="badge bg-primary">@product.Price</span></p>
                                     <a asp-controller="Product" asp-action="Details" asp-route-id=@product.Id asp-route-returnUrl="@Context.Request.Path" class="btn btn-dark">Details</a>
-                                    <a asp-controller="Product" asp-action="Delete" asp-route-id=@product.Id class="btn btn-danger">Delete</a>
+                                    <a asp-controller="Card" asp-action="Add" asp-route-id=@product.Id class="btn btn-danger">Add To Card</a>
                                 </div>
                             </div>
                         </div>
