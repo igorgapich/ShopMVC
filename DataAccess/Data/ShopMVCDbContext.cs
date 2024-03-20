@@ -1,10 +1,11 @@
 ﻿using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.EntitiesConfiguration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DataAccess.Data
 {
-    public class ShopMVCDbContext : DbContext
+    public class ShopMVCDbContext : IdentityDbContext
     {
 
         //public ShopMVCDbContext()

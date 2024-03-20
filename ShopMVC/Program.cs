@@ -1,8 +1,9 @@
-﻿using DataAccess.Data;
+using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddControllersWithViews();
 string connection = builder.Configuration.GetConnectionString("ShopMVCConnection") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
 //add contect WebAppLibraryContext as service by application
 builder.Services.AddDbContext<ShopMVCDbContext>(options => options.UseSqlServer(connection));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ShopMVCDbContext>();
 
 //add Fluent Validator
 builder.Services.AddFluentValidationAutoValidation();
@@ -45,6 +48,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseSession();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
