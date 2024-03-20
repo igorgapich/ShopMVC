@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
+using DataAccess.Entities;
 using DataAccess.Data;
 
 namespace ShopMVC.Controllers

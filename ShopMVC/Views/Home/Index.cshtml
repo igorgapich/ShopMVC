@@ -1,4 +1,4 @@
-﻿@using DataAccess.Models;
+﻿@using DataAccess.Entities;
 @model List<Product>
 @{
     string productImagePlaceholder = @"https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg";
@@ -41,7 +41,7 @@
                                     <h5 class="card-title">@product.Name</h5>
                                     <p class="card-text">@product.Description</p>
                                     <p class="fw-bold">Price <span class="badge bg-primary">@product.Price</span></p>
-                                    <a asp-controller="Product" asp-action="Details" asp-route-id=@product.Id class="btn btn-dark">Details</a>
+                                    <a asp-controller="Product" asp-action="Details" asp-route-id=@product.Id asp-route-returnUrl="@Context.Request.Path" class="btn btn-dark">Details</a>
                                     <a asp-controller="Product" asp-action="Delete" asp-route-id=@product.Id class="btn btn-danger">Delete</a>
                                 </div>
                             </div>

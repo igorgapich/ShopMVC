@@ -1,5 +1,5 @@
 using DataAccess.Data;
-using DataAccess.Models;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopMVC.Models;

@@ -1,5 +1,5 @@
 ﻿using DataAccess.Data;
-using DataAccess.Models;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,11 +24,12 @@ namespace ShopMVC.Controllers
             var products = _context.Products.Include(p=>p.Category).ToList();
             return View(products);
         }
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id, string returnUrl = null)
         {
             //find in DataBase
             var product = _context.Products.Include(p=>p.Category).FirstOrDefault(p => p.Id == id);
             if (product == null) return NotFound();
+            ViewBag.ReturnUrl = returnUrl;
             return View(product);
         }
 
