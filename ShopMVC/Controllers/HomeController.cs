@@ -2,6 +2,7 @@ using DataAccess.Data;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopMVC.Helper;
 using ShopMVC.Models;
 using System.Diagnostics;
 
@@ -44,6 +45,14 @@ namespace ShopMVC.Controllers
             {
                 products = products.Where(p => p.CategoryId == category_Id).ToList();
             }
+
+            var productsCardViewModel = products.Select(
+                p => new ProductCardViewModel
+                {
+                    Product = p,
+                    IsInCard = IsProductInCard(p.Id)
+                }).ToList();
+
             if (category_Id == null)
             {
                 ViewBag.ActiveCategoryId = 0;
@@ -53,8 +62,14 @@ namespace ShopMVC.Controllers
                 ViewBag.ActiveCategoryId = category_Id;
             }
 
-            return View(products);
+            return View(productsCardViewModel);
+        }
 
+        private bool IsProductInCard(int id)
+        {
+            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
+            if(idList == null) return false;
+            return idList.Contains(id);
         }
 
         //public string Index(string name="Guest")
