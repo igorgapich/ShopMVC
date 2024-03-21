@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DataAccess.Data
 {
-    public class ShopMVCDbContext : IdentityDbContext
+    public class ShopMVCDbContext : IdentityDbContext<User>
     {
 
         //public ShopMVCDbContext()

@@ -46,6 +46,7 @@
                 </tbody>
             </table>
             <p>Total: @Model.Sum(p => p.Price) $</p>
+            <a asp-controller="Order" asp-action="Create" type="button" class="btn btn-secondary">Confirm</a>
         </div>
     }
     else
