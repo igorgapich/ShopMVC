@@ -1,5 +1,6 @@
 using DataAccess.Data;
 using DataAccess.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopMVC.Helper;
@@ -84,6 +85,8 @@ namespace ShopMVC.Controllers
         }
         public IActionResult About()
         {
+            var services = HttpContext.RequestServices.GetService<UserManager<User>>();
+
             return View();
         }
 

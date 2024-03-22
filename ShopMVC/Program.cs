@@ -6,6 +6,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using DataAccess.Entities;
 using ShopMVC;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddScoped<IProductsService, ProductsService>();
 var app = builder.Build();
 
 using(var serviceScope = app.Services.CreateScope())

@@ -1,4 +1,5 @@
-﻿using DataAccess.Data;
+﻿using BusinessLogic.Interfaces;
+using DataAccess.Data;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,11 @@ namespace ShopMVC.Controllers
     public class ProductController : Controller
     {
         private readonly ShopMVCDbContext _context;
-        public ProductController(ShopMVCDbContext context)
+        private readonly IProductsService productsServices;
+        public ProductController(ShopMVCDbContext context, IProductsService productsServices)
         {
             _context = context;
+            this.productsServices = productsServices;
         }
 
         public IActionResult Index()
@@ -23,7 +26,7 @@ namespace ShopMVC.Controllers
             ViewBag.ListCategories = categories;
             ViewData["ListCategories"] = categories;
             //TODO: dbcontext
-            var products = _context.Products.Include(p=>p.Category).ToList();
+            var products = productsServices.GetAll();
             return View(products);
         }
         [AllowAnonymous]
@@ -39,7 +42,7 @@ namespace ShopMVC.Controllers
         public IActionResult Delete(int? id)
         {
             //find in DataBase
-            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            var product = productsServices.Get(id);
             if (product != null)
             {
                 _context.Products.Remove(product);
@@ -52,7 +55,7 @@ namespace ShopMVC.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var categories = _context.Categories.ToList();
+            var categories = productsServices.GetAllCategories();
             ViewBag.ListCategory = new SelectList(categories, "Id", "Name");
             return View();
         }
@@ -62,22 +65,21 @@ namespace ShopMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var categories = _context.Categories.ToList();
+                var categories = productsServices.GetAllCategories();
                 ViewBag.ListCategory = new SelectList(categories, "Id", "Name");
                 return View(product);
             }
-            _context.Products.Add(product);
-            _context.SaveChanges();
+            productsServices.Create(product);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult Edit(int? id) 
         {
-            var product = _context.Products.Include(p=>p.Category).FirstOrDefault(p=>p.Id == id);
+            var product = productsServices.Get(id);
             if (product != null)
             {
-                var categories = _context.Categories.ToList();
+                var categories = productsServices.GetAllCategories();
                 ViewBag.ListCategory = new SelectList(categories, "Id", "Name", product.CategoryId);
                 return View(product);
             }
@@ -87,8 +89,7 @@ namespace ShopMVC.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
-            _context.Products.Update(product);
-            _context.SaveChanges();
+            productsServices.Edit(product);
             return RedirectToAction("Index");
         }
     }
