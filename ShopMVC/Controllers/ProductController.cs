@@ -1,5 +1,6 @@
 ﻿using DataAccess.Data;
 using DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using ShopMVC.Models;
 
 namespace ShopMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly ShopMVCDbContext _context;
@@ -24,6 +26,7 @@ namespace ShopMVC.Controllers
             var products = _context.Products.Include(p=>p.Category).ToList();
             return View(products);
         }
+        [AllowAnonymous]
         public IActionResult Details(int? id, string returnUrl = null)
         {
             //find in DataBase

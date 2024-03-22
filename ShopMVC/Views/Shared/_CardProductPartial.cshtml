@@ -1,0 +1,25 @@
+﻿@model ProductCardViewModel
+@{
+    string productImagePlaceholder = @"https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg";
+}
+<div class="col-sm-4">
+    <div class="card">
+        <div class="product-card-img">
+            <img src="@(Model.Product.ImagePath??productImagePlaceholder)" class="card-img-top" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Product.Name</h5>
+            <p class="card-text">@Model.Product.Description</p>
+            <p class="fw-bold">Price <span class="badge bg-primary">@Model.Product.Price</span></p>
+            <a asp-controller="Product" asp-action="Details" asp-route-id=@Model.Product.Id asp-route-returnUrl="@Context.Request.Path" class="btn btn-dark">Details</a>
+            @if (!Model.IsInCard)
+            {
+                <a asp-controller="Card" asp-action="Add" asp-route-id=@Model.Product.Id class="btn btn-danger">Add To Card</a>
+            }
+            else
+            {
+                <a asp-controller="Card" asp-action="Remove" asp-route-id=@Model.Product.Id class="btn btn-secondary">Remove From Card</a>
+            }
+        </div>
+    </div>
+</div>

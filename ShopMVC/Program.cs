@@ -5,6 +5,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using DataAccess.Entities;
+using ShopMVC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,9 @@ string connection = builder.Configuration.GetConnectionString("ShopMVCConnection
 //add contect WebAppLibraryContext as service by application
 builder.Services.AddDbContext<ShopMVCDbContext>(options => options.UseSqlServer(connection));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ShopMVCDbContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ShopMVCDbContext>();
 
 //add Fluent Validator
 builder.Services.AddFluentValidationAutoValidation();
@@ -32,6 +35,13 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+
+using(var serviceScope = app.Services.CreateScope())
+{
+    var serviceProvaider = serviceScope.ServiceProvider;
+    Seeder.SeedRoles(serviceProvaider).Wait();
+    Seeder.SeedAdmin(serviceProvaider).Wait();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

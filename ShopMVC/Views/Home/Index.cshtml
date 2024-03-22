@@ -40,26 +40,7 @@ else
                 <div class="row">
                     @foreach (var product in Model)
                     {
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="product-card-img">
-                                <img src="@(product.Product.ImagePath??productImagePlaceholder)" class="card-img-top" alt="...">
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">@product.Product.Name</h5>
-                                    <p class="card-text">@product.Product.Description</p>
-                                    <p class="fw-bold">Price <span class="badge bg-primary">@product.Product.Price</span></p>
-                                    <a asp-controller="Product" asp-action="Details" asp-route-id=@product.Product.Id asp-route-returnUrl="@Context.Request.Path" class="btn btn-dark">Details</a>
-                                    @if(!product.IsInCard){
-                                        <a asp-controller="Card" asp-action="Add" asp-route-id=@product.Product.Id class="btn btn-danger">Add To Card</a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-controller="Card" asp-action="Remove" asp-route-id=@product.Product.Id class="btn btn-secondary">Remove From Card</a>
-                                    }
-                                </div>
-                            </div>
-                        </div>
+                        <partial name="_CardProductPartial" model="product"/>
                     }
                 </div>
             }
