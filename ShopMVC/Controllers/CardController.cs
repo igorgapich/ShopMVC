@@ -1,12 +1,10 @@
 ﻿using DataAccess.Data;
 using DataAccess.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopMVC.Helper;
 
 namespace ShopMVC.Controllers
 {
-    [Authorize]
     public class CardController : Controller
     {
         private readonly ShopMVCDbContext _context;

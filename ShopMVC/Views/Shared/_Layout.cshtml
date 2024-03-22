@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using DataAccess.Entities;
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -35,13 +40,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             @{
                                 var listPruductInCard = Context.Session.GetObject<List<int>>("mycard");
                             }
                             <a class="nav-link text-dark" asp-area="" asp-controller="Card" asp-action="Index">
-                                <i class="bi bi-cart4"></i>
-                                @(listPruductInCard?.Count ?? 0)
+                                Card <i class="bi bi-cart4"></i>@(listPruductInCard?.Count ?? 0)
                             </a>
                         </li>
                     </ul>

@@ -21,7 +21,7 @@ namespace DataAccess.EntitiesConfiguration
                 .HasMaxLength(1024);
 
             // Set relationship configuration
-            builder.HasOne(x => x.Category)
+            builder.HasOne<Category>(x => x.Category)
                 .WithMany(x => x.Products)
                 .HasForeignKey(x => x.CategoryId);
         }

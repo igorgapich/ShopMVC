@@ -25,7 +25,7 @@ builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssembli
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10000);
+    options.IdleTimeout = TimeSpan.FromSeconds(1000);
     options.Cookie.Name = "_ShopMVC.Session";
     options.Cookie.HttpOnly = false;
     options.Cookie.IsEssential = true;

@@ -12,7 +12,6 @@ namespace DataAccess.Validation
                 .NotNull()
                 .NotEmpty()
                 .MinimumLength(2)
-                .MaximumLength(100)
                 .WithMessage("Value {PropertyValue} is incorrect. {PropertyName} is required and must be lan greater 2...");
 
             RuleFor(product => product.Price)

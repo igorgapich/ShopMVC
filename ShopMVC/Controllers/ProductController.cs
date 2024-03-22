@@ -43,7 +43,7 @@ namespace ShopMVC.Controllers
                 _context.SaveChanges();
 
             }
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index),"Home");
         }
 
         [HttpGet]

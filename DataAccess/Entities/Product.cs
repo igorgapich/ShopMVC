@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+//using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,15 +14,15 @@ namespace DataAccess.Entities
     [EntityTypeConfiguration(typeof(ProductConfiguration))]
     public class Product
     {
-        [Key]
+        //[Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "Name is required"), StringLength(100, MinimumLength = 2)]
+        //[Required(ErrorMessage = "Name is required"), StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
         public string? Description { get; set; }
-        [Range (0, double.MaxValue, ErrorMessage = "Price must be greater than or equal to 0")]
+        //[Range (0, double.MaxValue, ErrorMessage = "Price must be greater than or equal to 0")]
         public decimal Price { get; set; }
-        [Url]
-        [DebuggerDisplay("Image Path URL")]
+        //[Url]
+        //[DebuggerDisplay("Image Path URL")]
         public string? ImagePath { get; set; }
         //[ForeignKey("Category")]
         public int CategoryId { get; set; }
