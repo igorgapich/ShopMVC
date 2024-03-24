@@ -40,7 +40,7 @@ builder.Services.AddScoped<IProductsService, ProductsService>();
 var app = builder.Build();
 
 using(var serviceScope = app.Services.CreateScope())
-{
+{ 
     var serviceProvaider = serviceScope.ServiceProvider;
     Seeder.SeedRoles(serviceProvaider).Wait();
     Seeder.SeedAdmin(serviceProvaider).Wait();
@@ -60,6 +60,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseSession();
 
