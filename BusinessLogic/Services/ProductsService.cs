@@ -53,5 +53,11 @@ namespace BusinessLogic.Services
         {
             return _context.Categories.ToList();
         }
+
+        public List<Product> GetByIds(int[] listId)
+        {
+            List<Product> products =  listId.Select(id => Get(id)).ToList();
+            return products;
+        }
     }
 }

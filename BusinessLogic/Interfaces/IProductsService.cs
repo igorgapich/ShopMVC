@@ -11,6 +11,7 @@ namespace BusinessLogic.Interfaces
     {
         List<Category> GetAllCategories();
         List<Product> GetAll();
+        List<Product> GetByIds(int[] listId);
         Product? Get(int? id);
         void Create(Product product);
         void Edit(Product product);

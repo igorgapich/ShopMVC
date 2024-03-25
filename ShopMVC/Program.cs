@@ -8,6 +8,7 @@ using DataAccess.Entities;
 using ShopMVC;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
+using ShopMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,11 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<IOrdersService, OrdersService>();
+
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 using(var serviceScope = app.Services.CreateScope())
@@ -59,8 +65,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseSession();
 

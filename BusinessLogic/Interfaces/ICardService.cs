@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace BusinessLogic.Interfaces
 {
     public interface ICardService
     {
-        
+        IEnumerable<Product> GetProducts();
+        void Add(int id);
+        void Remove(int id);
     }
 }

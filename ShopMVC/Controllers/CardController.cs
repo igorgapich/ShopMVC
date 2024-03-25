@@ -1,4 +1,5 @@
-﻿using DataAccess.Data;
+﻿using BusinessLogic.Interfaces;
+using DataAccess.Data;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using ShopMVC.Helper;
@@ -7,35 +8,25 @@ namespace ShopMVC.Controllers
 {
     public class CardController : Controller
     {
-        private readonly ShopMVCDbContext _context;
-        public CardController(ShopMVCDbContext context)
+        private readonly ICardService _cardService;
+
+        public CardController(ICardService cardService)
         {
-            _context = context;
+            _cardService = cardService;
         }
         public IActionResult Index()
         {
-            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
-            if (idList == null) idList = new List<int>();
-            List<Product> products = idList.Select(id => _context.Products.Find(id)).ToList();
-            return View(products);
+            return View(_cardService.GetProducts());
         }
         public IActionResult Add(int id)
         {
-            if(_context.Products.Find(id) == null) return NotFound();
-            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
-            if(idList == null) idList = new List<int>();
-            idList.Add(id); //add id of product to card
-            HttpContext.Session.SetObject<List<int>>("mycard", idList);
+            _cardService.Add(id);
             return RedirectToAction(nameof(Index), "Home");
         }
 
         public IActionResult Remove(int id)
         {
-            if (_context.Products.Find(id) == null) return NotFound();
-            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
-            if (idList == null) idList = new List<int>();
-            idList.Remove(id); //add id of product to card
-            HttpContext.Session.SetObject<List<int>>("mycard", idList);
+            _cardService.Remove(id);
             return RedirectToAction(nameof(Index), "Home");
         }
     }

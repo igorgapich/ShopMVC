@@ -1,4 +1,5 @@
-﻿using DataAccess.Data;
+﻿using BusinessLogic.Interfaces;
+using DataAccess.Data;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,35 +12,24 @@ namespace ShopMVC.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly ShopMVCDbContext _context;
-        public OrderController(ShopMVCDbContext context)
+        private readonly IOrdersService _ordersService;
+        public OrderController(IOrdersService ordersService)
         {
-            _context = context;
+           _ordersService = ordersService;
         }
+        
         public IActionResult Index()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orders = _context.Orders.Where(o => o.UserId == userId).ToList();
+            var orders = _ordersService.GetAll(userId);
             return View(orders);
         }
 
         public IActionResult Create()
         {
-            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
-            if (idList == null) return BadRequest();
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<Product> products = idList.Select(id => _context.Products.Find(id)).ToList();
-            Order newOrder = new Order()
-            {
-                OrderDate = DateTime.Now,
-                IdsProduct = JsonSerializer.Serialize(idList),
-                TotalPrice = products.Sum(p => p.Price),
-                UserId = userId
-            };
-
-            _context.Orders.Add(newOrder);
-            _context.SaveChanges();
-            //HttpContext.Session.Clear();
+            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
+            _ordersService.Create(userId, idList);
             HttpContext.Session.Remove("mycard");
             return RedirectToAction(nameof(Index));
         }
