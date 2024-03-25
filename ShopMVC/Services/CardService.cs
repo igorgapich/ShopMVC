@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using BusinessLogic.DTOs;
+using BusinessLogic.Interfaces;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using ShopMVC.Helper;
@@ -14,11 +15,11 @@ namespace ShopMVC.Services
             _httpContext = httpContextAccessor.HttpContext;
             _productsService = productsService;
         }
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<ProductDto> GetProducts()
         {
             List<int> idList = _httpContext.Session.GetObject<List<int>>("mycard");
             if (idList == null) idList = new List<int>();
-            List<Product> products = idList.Select(id => _productsService.Get(id)).ToList();
+            List<ProductDto> products = idList.Select(id => _productsService.Get(id)).ToList();
             return products;
         }
 

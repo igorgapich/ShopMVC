@@ -1,5 +1,5 @@
-﻿@using DataAccess.Entities;﻿
-@model Product
+﻿@using BusinessLogic.DTOs
+@model ProductDto
 
 @{
     string productImagePlaceholder = @"https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg";
@@ -36,7 +36,7 @@
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
             <p class="card-text">@Model.Description</p>
-            <p class="card-text">Category:<em><strong> @Model.Category?.Name</strong></em></p>
+            <p class="card-text">Category:<em><strong> @Model.CategoryName</strong></em></p>
             <p class="fw-bold">Price <span class="badge bg-primary">@Model.Price</span></p>
             @*href="~\Product\Index"*@
             @if (ViewBag.ReturnUrl == null)

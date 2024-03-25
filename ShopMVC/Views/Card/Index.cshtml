@@ -1,4 +1,4 @@
-﻿@model List<Product>
+﻿@model List<ProductDto>
 @{
     string productImagePlaceholder = @"https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg";
 }
@@ -29,7 +29,7 @@
                             </td>
                             <td>@product.Name</td>
                             <td>@product.Price</td>
-                            <td>@product.Category?.Name</td>
+                            <td>@product.CategoryName</td>
                             <td>
                                 <div class="d-flex justify-content-evenly">
                                     <a asp-controller="Card" asp-action="Remove" asp-route-id=@product.Id class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover me-2">

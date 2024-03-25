@@ -1,7 +1,8 @@
-﻿using BusinessLogic.Interfaces;
+﻿using BusinessLogic.DTOs;
+using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
 using DataAccess.Data;
-using DataAccess.Entities;
+//using DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,11 +22,11 @@ namespace ShopMVC.Controllers
 
         public IActionResult Index()
         {
-            List<Category> categories = _productsServices.GetAllCategories().ToList();
+            List<CategoryDto> categories = _productsServices.GetAllCategories().ToList();
             ViewBag.ListCategories = categories;
             ViewData["ListCategories"] = categories;
             //TODO: dbcontext
-            var products = _productsServices.GetAll();
+            var products = _productsServices.GetAll(); // product DTOs
             return View(products);
         }
 
@@ -33,10 +34,10 @@ namespace ShopMVC.Controllers
         public IActionResult Details(int? id, string returnUrl = null)
         {
             //find in DataBase
-            var product = _productsServices.Get(id);
-            if (product == null) return NotFound();
+            var productDto = _productsServices.Get(id);
+            if (productDto == null) return NotFound();
             ViewBag.ReturnUrl = returnUrl;
-            return View(product);
+            return View(productDto);
         }
 
         public IActionResult Delete(int? id)
@@ -55,15 +56,15 @@ namespace ShopMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(ProductDto productDto)
         {
             if (!ModelState.IsValid)
             {
                 var categories = _productsServices.GetAllCategories();
                 ViewBag.ListCategory = new SelectList(categories, "Id", "Name");
-                return View(product);
+                return View(productDto);
             }
-            _productsServices.Create(product);
+            _productsServices.Create(productDto);
             return RedirectToAction("Index");
         }
 
@@ -81,9 +82,9 @@ namespace ShopMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Edit(ProductDto productDto)
         {
-            _productsServices.Edit(product);
+            _productsServices.Edit(productDto);
             return RedirectToAction("Index");
         }
     }
