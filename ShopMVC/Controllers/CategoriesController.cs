@@ -7,34 +7,39 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Entities;
 using DataAccess.Data;
+using BusinessLogic.Interfaces;
 
 namespace ShopMVC.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ShopMVCDbContext _context;
+        //private readonly ShopMVCDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(ShopMVCDbContext context)
+
+        public CategoriesController(ShopMVCDbContext context, ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return _categoryService.GetAll() != null ?
+                        View(_categoryService.GetAll()) :
+                        Problem("Entity set 'ShopMVCDbContext.Categories'  is null.");
         }
 
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null || _categoryService.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = _categoryService.GetById(id);
+
             if (category == null)
             {
                 return NotFound();
@@ -58,8 +63,7 @@ namespace ShopMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
-                await _context.SaveChangesAsync();
+                _categoryService.Create(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -68,12 +72,12 @@ namespace ShopMVC.Controllers
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _categoryService.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = _categoryService.GetById(id);
             if (category == null)
             {
                 return NotFound();
@@ -97,12 +101,11 @@ namespace ShopMVC.Controllers
             {
                 try
                 {
-                    _context.Categories.Update(category);
-                    await _context.SaveChangesAsync();
+                    _categoryService.Edit(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!_categoryService.ExistCategory(id))
                     {
                         return NotFound();
                     }
@@ -119,13 +122,12 @@ namespace ShopMVC.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _categoryService.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = _categoryService.GetById(id);
             if (category == null)
             {
                 return NotFound();
@@ -139,19 +141,17 @@ namespace ShopMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            if (_categoryService.GetAll() == null)
+            {
+                return Problem("Entity set 'ShopMVCContext.Category'  is null.");
+            }
+            var category = _categoryService.GetById(id);
             if (category != null)
             {
-                _context.Categories.Remove(category);
+                _categoryService.Remove(category);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

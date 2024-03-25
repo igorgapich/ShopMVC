@@ -9,6 +9,8 @@ using ShopMVC;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
 using ShopMVC.Services;
+using DataAccess.Interfaces;
+using DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 //get connection string
 string connection = builder.Configuration.GetConnectionString("ShopMVCConnection") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
+
+//string connection = builder.Configuration.GetConnectionString("ShopMVCSomee") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
 //add contect WebAppLibraryContext as service by application
 builder.Services.AddDbContext<ShopMVCDbContext>(options => options.UseSqlServer(connection));
 
@@ -40,6 +44,13 @@ builder.Services.AddSession(options =>
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+//add IRepository for all Entities
+//builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
+//builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+//OR
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddHttpContextAccessor();
 

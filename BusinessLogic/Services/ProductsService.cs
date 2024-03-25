@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using DataAccess.Data;
 using DataAccess.Entities;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,20 @@ namespace BusinessLogic.Services
 {
     public class ProductsService : IProductsService
     {
-        private readonly ShopMVCDbContext _context;
-        public ProductsService(ShopMVCDbContext context)
+        private readonly IRepository<Product> _productRepo;
+        private readonly IRepository<Category> _categoryRepo;
+
+        //private readonly ShopMVCDbContext _context;
+        public ProductsService(IRepository<Product> productRepo,
+                                IRepository<Category> categoryRepo)
         {
-            _context = context;
+            _productRepo = productRepo;
+            _categoryRepo = categoryRepo;
         }
         public void Create(Product product)
         {
-            _context.Products.Add(product);
-            _context.SaveChanges();
+            _productRepo.Insert(product);
+            _productRepo.Save();
         }
 
         public void Delete(int? id)
@@ -28,36 +34,34 @@ namespace BusinessLogic.Services
             var product = Get(id);
             if (product != null)
             {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
-            }            
+                _productRepo.Delete(product);
+                _productRepo.Save();
+            }
+        }
+        public void Edit(Product product)
+        {
+            _productRepo.Update(product);
+            _productRepo.Save();
         }
 
         public Product? Get(int? id)
         {
-            return _context.Products.Include(p => p.Category).FirstOrDefault(p => p.Id == id);
+            //return _productRepo.GetByID(id);
+            return GetAll().FirstOrDefault(x => x.Id == id);
         }
+
         public List<Product> GetAll()
         {
-            return _context.Products.Include(p => p.Category).ToList();
+            //include properties: LEFT JOIN  in SQL
+            //return _productRepo.Get(includeProperties: new[] { "Category" }).ToList();
+            return _productRepo.Get(includeProperties: new[] { "Category" }).ToList();
         }
 
 
-        public void Edit(Product product)
-        {
-            _context.Products.Update(product);
-            _context.SaveChanges();
-        }
 
         public List<Category> GetAllCategories()
         {
-            return _context.Categories.ToList();
-        }
-
-        public List<Product> GetByIds(int[] listId)
-        {
-            List<Product> products =  listId.Select(id => Get(id)).ToList();
-            return products;
+            return _categoryRepo.Get().ToList();
         }
     }
 }
