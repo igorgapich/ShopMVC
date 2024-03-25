@@ -51,6 +51,9 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 //builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 //OR
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+    
+//Add AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddHttpContextAccessor();
 
