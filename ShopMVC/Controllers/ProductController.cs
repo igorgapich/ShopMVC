@@ -71,15 +71,8 @@ namespace ShopMVC.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            var product = _productsServices.Get(id);
-            CreateProductDto createProductDto = new CreateProductDto()
-            {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                CategoryId = product.CategoryId,
-                Image = 
-            };
+            var product = _productsServices.GetEditProductDto(id);
+            
             if (product != null)
             {
                 var categories = _productsServices.GetAllCategories();
@@ -90,7 +83,7 @@ namespace ShopMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(CreateProductDto productDto)
+        public IActionResult Edit(EditProductDto productDto)
         {
             _productsServices.Edit(productDto);
             return RedirectToAction("Index");

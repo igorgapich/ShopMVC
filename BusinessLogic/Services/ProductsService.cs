@@ -46,25 +46,30 @@ namespace BusinessLogic.Services
         public void Delete(int? id)
         {
             var product = _productRepo.GetByID(id);
+            _fileService.DeleteProductImage(product.ImagePath);
             if (product != null)
             {
                 _productRepo.Delete(product);
                 _productRepo.Save();
             }
         }
-        public void Edit(CreateProductDto productDto)
+        public void Edit(EditProductDto productDto)
         {
-            //delete oldFile from "image"
+            //delete oldfile from "images"
+            var productOld = Get(productDto.Id);
+            if (productOld != null)
+            {
+                //save new file
+                _fileService.DeleteProductImage(productOld.ImagePath);
+                //save image to server
+                string imagePath = _fileService.SaveProductImage(productDto.Image).Result;
+                productDto.ImagePath = imagePath;
 
-            // save new file
-
-            
-
-            //var product = _mapper.Map<Product>(productDto);
-            _productRepo.Update(product);
-            _productRepo.Save();
+                var product = _mapper.Map<Product>(productDto);
+                _productRepo.Update(product);
+                _productRepo.Save();
+            }
         }
-
         public ProductDto? Get(int? id)
         {
             //return _productRepo.GetByID(id);
@@ -142,20 +147,19 @@ namespace BusinessLogic.Services
             }).ToList();
         }
 
-        public CreateProductDto? GetCreateProductDto(int? id)
+        public EditProductDto? GetEditProductDto(int? id)
         {
-            var productDto = Get(id);
-            //fileService add UploadFile   productDto.ImagePath
-            CreateProductDto product = new CreateProductDto()
-            {
-                Name = productDto.Name,
-                Description = productDto.Description,
-                Price = productDto.Price,
-                //ImagePath = productDto.ImagePath,
-                CategoryId = productDto.CategoryId
-            };
+            var product = Get(id);
 
-            //return _fileService 
+            return new EditProductDto()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                ImagePath = product.ImagePath,
+                CategoryId = product.CategoryId,
+            };
         }
     }
 }

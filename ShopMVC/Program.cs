@@ -21,7 +21,11 @@ string connection = builder.Configuration.GetConnectionString("ShopMVCConnection
 
 //string connection = builder.Configuration.GetConnectionString("ShopMVCSomee") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
 //add contect WebAppLibraryContext as service by application
-builder.Services.AddDbContext<ShopMVCDbContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<ShopMVCDbContext>(options =>
+{
+    options.UseSqlServer(connection);
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking); //for 
+});
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()

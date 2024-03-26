@@ -19,12 +19,15 @@ namespace BusinessLogic.Services
             _environment = environment;
         }
 
-        public Task DeleteProductImage(string imagePath)
+        public async Task DeleteProductImage(string imagePath)
         {
-            //string imageFullPath
-            throw new NotImplementedException();
+            string root = _environment.WebRootPath;
+            var oldFile = Path.Combine(root, imagePath);
+            if (File.Exists(oldFile))
+            {
+                File.Delete(oldFile);
+            }
         }
-
         public async Task<string> SaveProductImage(IFormFile file)
         {
             // get path to "wwwroot" for ASP.NET Core
@@ -46,9 +49,6 @@ namespace BusinessLogic.Services
             return imagePath;
         }
 
-        public Task<string> UploadFile(string fileName, IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
