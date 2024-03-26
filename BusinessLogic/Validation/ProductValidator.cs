@@ -1,10 +1,11 @@
-﻿using DataAccess.Entities;
+﻿using BusinessLogic.DTOs;
+using DataAccess.Entities;
 using FluentValidation;
 //using Microsoft.AspNetCore.Identity;
 
 namespace DataAccess.Validation
 {
-    public class ProductValidator : AbstractValidator<Product>
+    public class ProductValidator : AbstractValidator<CreateProductDto>
     {
         public ProductValidator() 
         {
@@ -18,9 +19,15 @@ namespace DataAccess.Validation
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Value {PropertyValue} of property {PropertyName} is incorrect.");
 
-            RuleFor(product => product.ImagePath)
-                .Must(LinkMustBeAUri)
-                .WithMessage("{PropertyName} has incorrect URL format");
+            //RuleFor(product => product.ImagePath)
+            //    .Must(LinkMustBeAUri)
+            //    .WithMessage("{PropertyName} has incorrect URL format");
+
+            RuleFor(product => product.Image)
+                .NotNull()
+                .WithMessage("{PropertyName} is required!");
+
+
         }
 
         private static bool LinkMustBeAUri(string link)

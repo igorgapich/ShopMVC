@@ -1,11 +1,11 @@
 ﻿@using BusinessLogic.DTOs;
-@model ProductDto;
+@model CreateProductDto;
 
 <div class="container">
     <div class="row">
         <h2>Edit New Product</h2>
     </div>
-    <form asp-controller="Product" asp-action="Edit" method="post" class="row g-3">
+    <form asp-controller="Product" asp-action="Edit" method="post" class="row g-3" enctype="multipart/form-data">
         <div class="col-md-6">
             <label asp-for="Name" class="form-label">Name</label>
             <input asp-for="Name" type="text" class="form-control">
@@ -19,8 +19,8 @@
             <input asp-for="Price" type="number" step="0.01" class="form-control">
         </div>
         <div class="col-md-6">
-            <label asp-for="ImagePath" class="form-label">Image Path</label>
-            <input asp-for="ImagePath" type="text" class="form-control">
+            <label asp-for="Image" class="form-label">Image Path</label>
+            <input asp-for="Image" type="file" class="form-control">
         </div>
 
         <div class="col-md-6">
