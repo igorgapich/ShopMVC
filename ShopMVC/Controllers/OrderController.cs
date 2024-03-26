@@ -13,11 +13,14 @@ namespace ShopMVC.Controllers
     public class OrderController : Controller
     {
         private readonly IOrdersService _ordersService;
-        public OrderController(IOrdersService ordersService)
+        private readonly IMailService _mailService;
+
+        public OrderController(IOrdersService ordersService, IMailService mailService)
         {
-           _ordersService = ordersService;
+            _ordersService = ordersService;
+            _mailService = mailService;
         }
-        
+
         public IActionResult Index()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -25,12 +28,22 @@ namespace ShopMVC.Controllers
             return View(orders);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycard");
+            string userName = User.FindFirstValue(ClaimTypes.Name);
+            List<int> idList = HttpContext.Session.GetObject<List<int>>("mycart");
             _ordersService.Create(userId, idList);
-            HttpContext.Session.Remove("mycard");
+            HttpContext.Session.Remove("mycart");
+            var orders = _ordersService.GetAll(userId);
+            string text = "";
+            foreach (var item in orders)
+            {
+                text += $"{item.Id} {item.OrderDate}  {item.TotalPrice}\n";
+
+            }
+            await _mailService.SendMailAsync("Your Order", text, "hohalax367@searpen.com");
+            await _mailService.SendMailAsync("Your Order", text, userName);
             return RedirectToAction(nameof(Index));
         }
     }
