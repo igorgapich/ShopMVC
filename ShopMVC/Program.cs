@@ -17,7 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 //get connection string
-string connection = builder.Configuration.GetConnectionString("ShopMVCConnection") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
+//string connection = builder.Configuration.GetConnectionString("ShopMVCConnection") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
+string connection = builder.Configuration.GetConnectionString("AzureConnection") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
 
 //string connection = builder.Configuration.GetConnectionString("ShopMVCSomee") ?? throw new InvalidOperationException("Connection string 'ShopMVCConnection' not found.");
 //add contect WebAppLibraryContext as service by application
@@ -57,7 +58,7 @@ builder.Services.AddScoped<IMailService, MailService>();
 //builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 //OR
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-    
+
 //Add AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -65,8 +66,8 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-using(var serviceScope = app.Services.CreateScope())
-{ 
+using (var serviceScope = app.Services.CreateScope())
+{
     var serviceProvaider = serviceScope.ServiceProvider;
     Seeder.SeedRoles(serviceProvaider).Wait();
     Seeder.SeedAdmin(serviceProvaider).Wait();
